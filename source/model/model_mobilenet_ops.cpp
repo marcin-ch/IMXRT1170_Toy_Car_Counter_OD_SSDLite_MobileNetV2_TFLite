@@ -41,5 +41,9 @@ void MODEL_RegisterOps(tflite::MutableOpResolver &resolver)
 						tflite::ops::builtin::Register_LOGISTIC(),
 						/* min_version */ 1,
 						/* max_version */ 2);
+    resolver.AddBuiltin(tflite::BuiltinOperator_ADD,
+						tflite::ops::builtin::Register_ADD(),
+						/* min_version */ 1,
+						/* max_version */ 2);
     resolver.AddCustom("TFLite_Detection_PostProcess", tflite::ops::custom::Register_TFLite_Detection_PostProcess());
 }

@@ -11,13 +11,25 @@
 #include "image_from_eiq.h"
 #include "image_utils.h"
 //#include "image_data.h" // stopwatch
-#include "apple_banana_orange.h"
+//#include "apple_banana_orange.h"
+
+//Toy cars images
+#include "toy_cars_800x364_full_3x3.h" //ok
+#include "toy_cars_800x370_not_full_3x3.h" //ok
+#include "toy_cars_800x368_not_full_4x4.h" //ok
+#include "toy_cars_800x363_full_4x4.h" //2 items not detected
+
 #include "eiq_video_worker.h"
 
 //#define CURRENT_IMAGE     image_data // stopwatch
-#define CURRENT_IMAGE     apple_banana_orange_bmp
+//#define CURRENT_IMAGE     apple_banana_orange_bmp
 
-const char* s_imageName = STATIC_IMAGE_NAME;
+//#define CURRENT_IMAGE     toy_cars_800x364_full_3x3_bmp
+//#define CURRENT_IMAGE     toy_cars_800x370_not_full_3x3_bmp
+//#define CURRENT_IMAGE     toy_cars_800x368_not_full_4x4_bmp
+#define CURRENT_IMAGE     toy_cars_800x363_full_4x4_bmp
+
+//const char* s_imageName = STATIC_IMAGE_NAME;
 EIQ_VideoWorker_t* s_worker = NULL;
 uint8_t* s_captureBuffer = NULL;
 Dims_t s_captureBufferDims;
@@ -55,10 +67,10 @@ status_t IMAGE_GetImage(uint8_t* dstData, int32_t dstWidth, int32_t dstHeight, i
 //    return kStatus_Success;
 }
 
-const char* IMAGE_GetImageName()
-{
-    return s_imageName;
-}
+//const char* IMAGE_GetImageName()
+//{
+//    return s_imageName;
+//}
 
 const uint8_t* IMAGE_ReadStaticImage()
 {

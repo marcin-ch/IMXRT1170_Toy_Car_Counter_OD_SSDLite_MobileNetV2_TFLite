@@ -13,7 +13,8 @@
 #include "tensorflow/lite/string_util.h"
 
 #include "model.h"
-#include "ssd_mobilenet_v1_1_metadata_1.h"
+#include "mobile_object_localizer_v1_1_meta.h"
+//#include "ssd_mobilenet_v1_1_metadata_1.h"
 //#include "model_data.h"
 #include "labels.h"
 #include "GUI.h"
@@ -28,7 +29,8 @@ extern void MODEL_RegisterOps(tflite::MutableOpResolver &resolver);
 
 status_t MODEL_Init()
 {
-	model = tflite::FlatBufferModel::BuildFromBuffer(ssd_mobilenet_v1_1_metadata_1_tflite, ssd_mobilenet_v1_1_metadata_1_tflite_len);
+	model = tflite::FlatBufferModel::BuildFromBuffer(mobile_object_localizer_v1_1_meta_tflite, mobile_object_localizer_v1_1_meta_tflite_len);
+//	model = tflite::FlatBufferModel::BuildFromBuffer(ssd_mobilenet_v1_1_metadata_1_tflite, ssd_mobilenet_v1_1_metadata_1_tflite_len);
 //	model = tflite::FlatBufferModel::BuildFromBuffer(model_data, model_data_len);
     if (!model)
     {
@@ -200,8 +202,11 @@ void MODEL_OD_Outputs_PostProc(int inferenceTime){
 	GUI_SetBkColor(GUI_GRAY_D0); // to make light grey background for printing classes/class indexes
 	GUI_SetPenSize(6);
 
+	char print_buf_counter[10];
+	int counter = 0;
+
 	for (int i = 0; i < num_detections_value; i++){
-		const float class_idx = detection_classes[i];
+		const float class_idx = detection_classes[i]; //always 0 as this model supports only one class
 		const std::string cls = labels[int(class_idx)];
 //		const std::string cls = labels[detection_classes[i]];
 		const float score = detection_scores[i];
@@ -218,6 +223,7 @@ void MODEL_OD_Outputs_PostProc(int inferenceTime){
 		char print_buf_score[10];
 
 		if(score * 100 > DETECTION_TRESHOLD) {
+			counter++;
 			std::cout << "Detected " << cls << " with score " << (int)(score*100) << " [" << xmin << "," << ymin << ":" << xmax << "," << ymax << "]\r\n";
 
 			if(i==0){
@@ -229,10 +235,15 @@ void MODEL_OD_Outputs_PostProc(int inferenceTime){
 
 			sprintf(print_buf_score, "%2d%%", (int)(score*100));
 			GUI_DrawRect(xmin, ymin, xmax, ymax); // print bounding boxes
-			GUI_DispStringAt(class_name, xmin+(5*IMAGE_SCALE), ymin+(5*IMAGE_SCALE)); // print recognized classes
+//			GUI_DispStringAt(class_name, xmin+(5*IMAGE_SCALE), ymin+(5*IMAGE_SCALE)); // print recognized classes
 			GUI_DispStringAt(print_buf_score, xmin+(5*IMAGE_SCALE), ymin+(20*IMAGE_SCALE)); // print scores (confidence levels)
 		}
 	}
+	GUI_SetColor(GUI_BLUE);
+	sprintf(print_buf_counter, "%2d", counter);
+	GUI_DispStringAt("Detected toy cars", (image_width * IMAGE_SCALE), 0);
+	GUI_SetColor(GUI_RED);
+	GUI_DispStringAt(print_buf_counter, (image_width * IMAGE_SCALE), 0+25); // print detected toy cars number
 }
 
 // Convert unsigned 8-bit image data to model input format in-place.
