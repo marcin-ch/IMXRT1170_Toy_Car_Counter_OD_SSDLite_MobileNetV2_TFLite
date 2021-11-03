@@ -39,7 +39,11 @@ Inference time is approximately **1,6 seconds** (connect terminal such as Tera T
 | input | 192x192 pixels | 300x300 pixels |
 | detected classes | 1 | [90](https://www.tensorflow.org/lite/examples/object_detection/overview#fine-tuning_models_on_custom_data) |
 
-The thing makes me wonder are scores [confidence % levels], they are pretty low, from 19% (because of `DETECTION_TRESHOLD` set to **19%**) up to only 73%, however in general they look like less than 50%. I believe this is for further investigantion.
+The thing makes me wonder are scores [confidence % levels], they are pretty low, from 19% (because of `DETECTION_TRESHOLD` set to **19%**) up to only 73%, however in general they look like less than 50%. I believe this is for further investigation. Reviewing again the model's [documentation](https://tfhub.dev/google/object_detection/mobile_object_localizer_v1/1) (*Additional information* section), I figured out that recommended threshold is 0.2, therefore I was very close with setting `DETECTION_TRESHOLD` 19%. Perhaps, low scores might be totally fine as this is how this model works.
+
+Model's [documentation](https://tfhub.dev/google/object_detection/mobile_object_localizer_v1/1) provides interesting info as follows:
+* this model is suitable for localizing the **most prominent** objects in an image
+* this model may not perform well on very small objects
 
 **The goal of this repo is to choose another ready to use (out of the box) model coming from, for example [TensorFlow Hub](https://tfhub.dev/), and check how it influences inference time.**
 
